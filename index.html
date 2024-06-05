@@ -1,20 +1,121 @@
-<html>
+<!DOCTYPE html>
+<html lang="hu">
 <head>
-<title>cucc</title>
-<style>
-  body{
-    background-color: coral;
-    
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kő-Papír-Olló</title>
+	
+	<style>
+	body {
+	font-family: Arial, sans-serif;
+	text-align: center;
+	}
+
+	.container {
+		width: 300px;
+		margin: 40px auto;
+		padding: 20px;
+		border: 1px solid #ccc;
+		border-radius: 10px;
+		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+	}
+
+	.valasztas {
+		width: 30%;
+		margin: 10px;
+		padding: 10px;
+		border: none;
+		border-radius: 10px;
+		background-color: #4CAF50;
+		color: #fff;
+		cursor: pointer;
+	}
+
+	.valasztas:hover {
+		background-color: #3e8e41;
+	}
+
+	.result {
+		font-size: 24px;
+		font-weight: bold;
+		margin-top: 20px;
+	}
+	</style>
+	
 </head>
 <body>
-  <h2>Csak GitHub-os lapok!</h2>
-<h1>Ide kérem az elérhetőségeket</h1>
-  <ul>
-    <li>
-      Név és link kerüljön ide.
-    </li>
-  </ul>
+    <h1>Kő-Papír-Olló</h1>
+    <div class="container">
+        <button class="valasztas" id="ko">
+		Kő
+		</button>
+        <button class="valasztas" id="paper">
+		Papír
+		</button>
+        <button class="valasztas" id="scissors">
+		Olló
+		</button>
+        <div class="veg"></div>
+    </div>
 </body>
+
+    <script>
+		v = document.querySelectorAll('.valasztas');
+		vege = document.querySelector('.veg');
+		
+		koImg = "ko.png";
+		papirImg = 'papir.png';
+		olloImg = 'ollo.png';
+
+		v.forEach(valasztas => {
+			valasztas.addEventListener('click', jatek);
+		});
+
+		function jatek() {
+			felhVId = this.id;
+			felhV = "";
+			if (felhVId === 'ko') {
+				felhV = koImg;
+			} else if (felhVId === 'paper') {
+				felhV = papirImg;
+			} else {
+				felhV = olloImg;
+			}
+			gepv = gepveredmeny();
+			veg = kivalaszt(felhV, gepv);
+
+			kiiras(veg, felhV, gepv);
+		}
+
+		function gepveredmeny() {
+			v = [koImg, papirImg, olloImg];
+			return v[Math.floor(Math.random() * v.length)];
+		}
+
+		function kivalaszt(felhV, gepv) {
+			if (felhV === gepv) {
+				return 'Döntetlen!';
+			} else if ((felhV === koImg && gepv === olloImg) ||
+					   (felhV === papirImg && gepv === koImg) ||
+					   (felhV === olloImg && gepv === papirImg)) {
+				return 'Nyertél!';
+			} else {
+				return 'Vesztettél!';
+			}
+		}
+
+		function kiiras(veg, felhV, gepv) {
+			felhImg = document.createElement('img');
+			felhImg.src = felhV;
+			felhImg.alt = felhV;
+
+			gepImg = document.createElement('img');
+			gepImg.src = gepv;
+			gepImg.alt = gepv;
+
+			vege.innerHTML = `Te: <br> ${felhImg.outerHTML} <br> Gép: <br> ${gepImg.outerHTML} <br> ${veg}`;
+		}
+			
+	</script>
+
 </html>
