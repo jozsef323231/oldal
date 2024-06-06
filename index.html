@@ -13,14 +13,26 @@
 
 	.container {
 		width: 300px;
-		margin: 40px auto;
+		margin: 40px;
 		padding: 20px;
 		border: 1px solid #ccc;
 		border-radius: 10px;
 		box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+		display: inline-block;
 	}
 
 	.valasztas {
+		width: 30%;
+		margin: 10px;
+		padding: 10px;
+		border: none;
+		border-radius: 10px;
+		background-color: #4CAF50;
+		color: #fff;
+		cursor: pointer;
+	}
+
+	.valasztask {
 		width: 30%;
 		margin: 10px;
 		padding: 10px;
@@ -35,10 +47,25 @@
 		background-color: #3e8e41;
 	}
 
+	.valasztask:hover {
+		background-color: #3e8e41;
+	}
+
 	.result {
 		font-size: 24px;
 		font-weight: bold;
 		margin-top: 20px;
+	}
+
+	.eredm {
+		border: 2px solid black;
+		box-shadow: 0 0 10px rgb(146, 146, 146);
+		padding: 10px;
+		border-radius: 15px;
+		width: 10%;
+		margin: 0 auto;
+		display: block;
+		height: 20%;
 	}
 	</style>
 	
@@ -46,6 +73,7 @@
 <body>
     <h1>Kő-Papír-Olló</h1>
     <div class="container">
+		<h1>Játékos 1.</h1>
         <button class="valasztas" id="ko">
 		Kő
 		</button>
@@ -55,20 +83,39 @@
         <button class="valasztas" id="scissors">
 		Olló
 		</button>
-        <div class="veg"></div>
     </div>
+
+    <div class="container">
+		<h1>Játékos 2.</h1>
+        <button class="valasztask" id="ko2">
+		Kő
+		</button>
+        <button class="valasztask" id="paper2">
+		Papír
+		</button>
+        <button class="valasztask" id="scissors2">
+		Olló
+		</button>
+    </div>
+	<div class="eredm veg"></div>
+	
 </body>
 
     <script>
-		v = document.querySelectorAll('.valasztas');
+		v1 = document.querySelectorAll('.valasztas');
 		vege = document.querySelector('.veg');
+		v2 = document.querySelectorAll('.valasztask');
 		
 		koImg = "ko.png";
 		papirImg = 'papir.png';
 		olloImg = 'ollo.png';
 
-		v.forEach(valasztas => {
+		v1.forEach(valasztas => {
 			valasztas.addEventListener('click', jatek);
+		});
+
+		v2.forEach(valasztask => {
+			valasztask.addEventListener('click', jatekos2);
 		});
 
 		function jatek() {
@@ -78,42 +125,52 @@
 				felhV = koImg;
 			} else if (felhVId === 'paper') {
 				felhV = papirImg;
-			} else {
+			} else if (felhVId === 'scissors') {
 				felhV = olloImg;
 			}
-			gepv = gepveredmeny();
-			veg = kivalaszt(felhV, gepv);
-
-			kiiras(veg, felhV, gepv);
+			kiiras("Választás", felhV, "")
 		}
 
-		function gepveredmeny() {
-			v = [koImg, papirImg, olloImg];
-			return v[Math.floor(Math.random() * v.length)];
+
+		function jatekos2() {
+			felhV2Id = this.id;
+			felhV2 = "";
+			if (felhV2Id === 'ko2') {
+				felhV2 = koImg;
+			} else if (felhV2Id === 'paper2') {
+				felhV2 = papirImg;
+			} else if (felhV2Id === 'scissors2') {
+				felhV2 = olloImg;
+			}
+			veg = kivalaszt(felhV, felhV2);
+			kiiras(veg, felhV, felhV2);
 		}
 
-		function kivalaszt(felhV, gepv) {
-			if (felhV === gepv) {
+
+		function kivalaszt(felhV, felhV2) {
+			if (felhV === felhV2) {
 				return 'Döntetlen!';
-			} else if ((felhV === koImg && gepv === olloImg) ||
-					   (felhV === papirImg && gepv === koImg) ||
-					   (felhV === olloImg && gepv === papirImg)) {
-				return 'Nyertél!';
-			} else {
-				return 'Vesztettél!';
+			} else if ((felhV === koImg && felhV2 === olloImg) ||
+					   (felhV === papirImg && felhV2 === koImg) ||
+					   (felhV === olloImg && felhV2 === papirImg)) {
+				return 'Nyert Játékos 1!';
+			} else if ((felhV2 === koImg && felhV === olloImg) ||
+					   (felhV2 === papirImg && felhV === koImg) ||
+					   (felhV2 === olloImg && felhV === papirImg)) {
+				return 'Nyert Játékos 2!';
 			}
 		}
 
-		function kiiras(veg, felhV, gepv) {
+		function kiiras(veg, felhV, felhV2) {
 			felhImg = document.createElement('img');
 			felhImg.src = felhV;
 			felhImg.alt = felhV;
 
-			gepImg = document.createElement('img');
-			gepImg.src = gepv;
-			gepImg.alt = gepv;
+			felh2Img = document.createElement('img');
+			felh2Img.src = felhV2;
+			felh2Img.alt = felhV2;
 
-			vege.innerHTML = `Te: <br> ${felhImg.outerHTML} <br> Gép: <br> ${gepImg.outerHTML} <br> ${veg}`;
+			vege.innerHTML = `<strong>Játékos 1:</strong> <br> ${felhImg.outerHTML} <br> <strong>Játékos 2:</strong> <br> ${felh2Img.outerHTML} <br> ${veg}`;
 		}
 			
 	</script>
