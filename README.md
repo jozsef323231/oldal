@@ -1,2 +1,2 @@
 # oldal
-Kő papír olló játék, 2 játékosos
+Alap kő papír olló játék
