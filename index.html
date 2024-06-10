@@ -1,3 +1,5 @@
+
+
 <!DOCTYPE html>
 <html lang="hu">
 <head>
@@ -70,10 +72,46 @@
 	</style>
 	
 </head>
+
 <body>
     <h1>Kő-Papír-Olló</h1>
     <div class="container">
-		<h1>Játékos 1.</h1>
+		<h1>Válassza ki a játékmódot</h1>
+        <button class="valasztas" id="gepvsjatekos">
+		Gép vs Játékos
+		</button>
+        <button class="valasztas" id="jatekosvsjatekos">
+		Játékos vs Játékos
+		</button>
+    </div>
+</body>
+
+    <script>
+		v = document.querySelectorAll('.valasztas');
+		vege = document.querySelector('.veg');
+		
+		v.forEach(valasztas => {
+			valasztas.addEventListener('click', jatekMod);
+		});
+
+		function jatekMod() {
+			mod = this.id;
+			if (mod === 'gepvsjatekos') {
+				jatekGepVsJatekos();
+			} else if (mod === 'jatekosvsjatekos') {
+				jatekJatekosVsJatekos();
+			}
+		}
+
+
+
+
+
+
+		function jatekGepVsJatekos() {
+			document.body.innerHTML = `
+    <div class="container">
+		<h1>Játékos</h1>
         <button class="valasztas" id="ko">
 		Kő
 		</button>
@@ -84,24 +122,103 @@
 		Olló
 		</button>
     </div>
-
-    <div class="container">
-		<h1>Játékos 2.</h1>
-        <button class="valasztask" id="ko2">
-		Kő
-		</button>
-        <button class="valasztask" id="paper2">
-		Papír
-		</button>
-        <button class="valasztask" id="scissors2">
-		Olló
-		</button>
-    </div>
 	<div class="eredm veg"></div>
-	
-</body>
+			`;
 
-    <script>
+			v = document.querySelectorAll('.valasztas');
+			vege = document.querySelector('.veg');
+
+			koImg = "ko.png";
+			papirImg = 'papir.png';
+			olloImg = 'ollo.png';
+
+			v.forEach(valasztas => {
+				valasztas.addEventListener('click', jatek);
+			});
+
+			function jatek() {
+				felhVId = this.id;
+				felhV = "";
+				if (felhVId === 'ko') {
+					felhV = koImg;
+				} else if (felhVId === 'paper') {
+					felhV = papirImg;
+				} else {
+					felhV = olloImg;
+				}
+				gepv = gepveredmeny();
+				veg = kivalaszt(felhV, gepv);
+
+				kiiras(veg, felhV, gepv);
+			}
+
+			function gepveredmeny() {
+				v = [koImg, papirImg, olloImg];
+				return v[Math.floor(Math.random() * v.length)];
+			}
+
+			function kivalaszt(felhV, gepv) {
+				if (felhV === gepv) {
+					return 'Döntetlen!';
+				} else if ((felhV === koImg && gepv === olloImg) ||
+						(felhV === papirImg && gepv === koImg) ||
+						(felhV === olloImg && gepv === papirImg)) {
+					return 'Nyertél!';
+				} else {
+					return 'Vesztettél!';
+				}
+			}
+
+			function kiiras(veg, felhV, gepv) {
+				felhImg = document.createElement('img');
+				felhImg.src = felhV;
+				felhImg.alt = felhV;
+
+				gepImg = document.createElement('img');
+				gepImg.src = gepv;
+				gepImg.alt = gepv;
+
+				vege.innerHTML = `<strong>Te:</strong> <br> ${felhImg.outerHTML} <br> <strong>Gép:</strong> <br> ${gepImg.outerHTML} <br> ${veg}`;
+			}
+		}
+
+
+
+
+
+
+
+		function jatekJatekosVsJatekos() {
+			document.body.innerHTML = `
+				<div class="container">
+					<h1>Játékos 1.</h1>
+					<button class="valasztas" id="ko">
+						Kő
+					</button>
+					<button class="valasztas" id="paper">
+						Papír
+					</button>
+					<button class="valasztas" id="scissors">
+						Olló
+					</button>
+				</div>
+
+				<div class="container">
+					<h1>Játékos 2.</h1>
+					<button class="valasztask" id="ko2">
+						Kő
+					</button>
+					<button class="valasztask" id="paper2">
+						Papír
+					</button>
+					<button class="valasztask" id="scissors2">
+						Olló
+					</button>
+				</div>
+
+				<div class="eredm veg"></div>
+			`;
+
 		v1 = document.querySelectorAll('.valasztas');
 		vege = document.querySelector('.veg');
 		v2 = document.querySelectorAll('.valasztask');
@@ -171,6 +288,8 @@
 			felh2Img.alt = felhV2;
 
 			vege.innerHTML = `<strong>Játékos 1:</strong> <br> ${felhImg.outerHTML} <br> <strong>Játékos 2:</strong> <br> ${felh2Img.outerHTML} <br> ${veg}`;
+		}
+			
 		}
 			
 	</script>
